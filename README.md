@@ -1,12 +1,7 @@
-.env
-
-MARIADB_PASSWORD=XXXXX
-
-CLOUDFLARE_TUNNEL_TOKEN=XXXXX
-
-
-Cloudflare : Public hostnames
-
-http://nginx
-
-http://phpmyadmin
+.env<br>
+MARIADB_PASSWORD=XXXXX<br>
+CLOUDFLARE_TUNNEL_TOKEN=XXXXX<br>
+<br>
+Cloudflare : Public hostnames<br>
+http://nginx<br>
+http://phpmyadmin<br>
