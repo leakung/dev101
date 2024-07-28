@@ -1,0 +1,65 @@
+name: dev101
+services:
+
+  php-fpm:
+    container_name: php-fpm 
+    build:
+      context: ./
+    restart: unless-stopped
+    expose:
+      - "9000"
+    volumes:
+      - ./usr-share-nginx-html:/usr/share/nginx/html
+      - ./root:/root
+    networks:
+      - app-network
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Bangkok
+      MARIADB_ROOT_PASSWORD: ${MARIADB_PASSWORD}
+    volumes:
+      - ./var-lib-mysql:/var/lib/mysql
+    networks:
+      - app-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+    depends_on:
+      - mariadb
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Bangkok
+    volumes:
+      - ./etc-nginx-conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./var-log-nginx:/var/log/nginx
+      - ./usr-share-nginx-html:/usr/share/nginx/html
+    networks:
+      - app-network
+
+  cloudflared:
+    image: cloudflare/cloudflared
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - app-network
+
+networks:
+  app-network:
