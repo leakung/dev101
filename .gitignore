@@ -1,0 +1,5 @@
+.env
+root/
+usr-share-nginx-html/
+var-lib-mysql/
+var-log-nginx/
